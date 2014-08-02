@@ -50,7 +50,7 @@ public class SRT extends Application {
 	private void createStage(Stage primaryStage) {
 		//		primaryStage.setFullScreen(true);
 		primaryStage.setMaximized(true);
-		
+
 		primaryStage.setTitle("jSRT");
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -84,7 +84,7 @@ public class SRT extends Application {
 		border = new BorderPane();
 		border.setCenter(vBoxCenter);
 		border.setLeft(vBoxLeft);
-		
+
 		scene = new Scene(border, 300, 250);
 	}
 
@@ -102,25 +102,52 @@ public class SRT extends Application {
 			StartSRT(inputText.getText());
 		});
 
-		label1 = new Label("Manual input:");
-
-		vBoxCenter.getChildren().setAll(label1, inputText, startSrt_btn);
+//		label1 = new Label("Manual input:");
+		vBoxCenter.getChildren().setAll(inputText, startSrt_btn);
 	}
 
 	private void StartSRT(String input) {
-		List<String> wrappedText = new ArrayList<>();
-		wrappedText = Arrays.asList(input.split(" "));
+		String output = "";
+		ArrayList<String> wrappedText = new ArrayList<>(Arrays.asList(input.split(" ")));
+//		wrappedText = Arrays.asList(input.split(" "));
+
+		output = joinWordsToLine(wrappedText);
 		
-		Label text = new Label(input);
+		Label text = new Label(output);
 		text.setMinSize(300, 500);
 		text.setMaxSize(800, 800);
-		
+
 		Button back = new Button("back");
 		back.setOnAction((ActionEvent event) -> {
 			setupStart();
 		});
 		vBoxCenter.getChildren().setAll(text, back);
 
+	}
+
+	private String joinWordsToLine(ArrayList<String> text) {
+		String lines = "";
+		String line = "";
+		int maxCharCount = 100;
+
+		for (String word : text) {
+			if (line.length() + word.length() + 1 < maxCharCount) {
+				line += word + " ";
+			} else if (line.length() + word.length() + 1 == maxCharCount) {
+				line += word;
+			} else if (line.length() + word.length() > maxCharCount) {
+				line += "\n";
+				lines += line;
+				line = "";
+			} else {
+				line += "\n";
+				lines += line;
+				line = "";
+			}
+		}
+		lines += line;
+
+		return lines;
 	}
 
 	/**
