@@ -128,7 +128,7 @@ public class SRT extends Application {
 
 	}
 
-	private String joinWordsToLine(ArrayList<String> text) {
+	public String joinWordsToLine(ArrayList<String> text) {
 		String lines = "";
 		String lineBuf = "";
 		int maxCharCount = 100;
@@ -176,6 +176,7 @@ public class SRT extends Application {
 				lines += lineBuf;
 				lineBuf = "";
 			}
+			System.out.println(lineBuf);
 		}
 		lines += lineBuf;
 
