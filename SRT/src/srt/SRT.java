@@ -7,7 +7,6 @@ package srt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -20,6 +19,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import com.itextpdf.text.pdf.hyphenation.*;
 
 /**
  *
@@ -45,6 +45,9 @@ public class SRT extends Application {
 		setupStart();
 
 		createStage(primaryStage);
+//		Hyphenator h = new Hyphenator("de", "DR", 2, 2);
+//		Hyphenation s = h.hyphenate("Dachlatte"); 
+//		System.out.println(s);
 	}
 
 	private void createStage(Stage primaryStage) {
@@ -127,25 +130,54 @@ public class SRT extends Application {
 
 	private String joinWordsToLine(ArrayList<String> text) {
 		String lines = "";
-		String line = "";
+		String lineBuf = "";
 		int maxCharCount = 100;
-
+		
+        Hyphenator h = new Hyphenator("de", "DR", 2, 2);
+        Hyphenation s;
+		String hyphText = "";
+		boolean addHyph = false;
+		String postHyphenAtNewLine = "";
+		
 		for (String word : text) {
-			if (line.length() + word.length() + 1 < maxCharCount) {
-				line += word + " ";
-			} else if (line.length() + word.length() + 1 == maxCharCount) {
-				line += word;
-			} else if (line.length() + word.length() > maxCharCount) {
-				line += "\n";
-				lines += line;
-				line = "";
+			lineBuf += postHyphenAtNewLine;
+			postHyphenAtNewLine = "";
+			
+			if (lineBuf.length() + word.length() + 1 < maxCharCount) {
+				lineBuf += word + " ";
+			} else if (lineBuf.length() + word.length() + 1 == maxCharCount) {
+				lineBuf += word;
+			} else if (lineBuf.length() + word.length() > maxCharCount) {
+				//TODO: hyphenation				
+				s = h.hyphenate(word);
+				hyphText = "";
+				if (s != null) {
+					for (int i = 0; i < s.getHyphenationPoints().length; i++) {
+						hyphText += s.getPreHyphenText(i);
+						if (lineBuf.length() + hyphText.length() + 1 <= maxCharCount) {
+							lineBuf += s.getPreHyphenText(i);
+							addHyph = true;
+						} else {
+							break;
+						}
+					}
+				}
+				if (addHyph && s != null) {
+					lineBuf += "-\n";
+					postHyphenAtNewLine = s.getPostHyphenText(s.getHyphenationPoints().length -1);
+					lines += lineBuf;
+				} else {
+					lineBuf += "\n";
+					lines += lineBuf;
+					lineBuf = "";
+				}
 			} else {
-				line += "\n";
-				lines += line;
-				line = "";
+				lineBuf += "\n";
+				lines += lineBuf;
+				lineBuf = "";
 			}
 		}
-		lines += line;
+		lines += lineBuf;
 
 		return lines;
 	}
