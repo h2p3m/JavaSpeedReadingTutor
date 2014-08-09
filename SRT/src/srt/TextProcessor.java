@@ -5,6 +5,8 @@
  */
 package srt;
 
+import com.itextpdf.text.pdf.hyphenation.Hyphenation;
+import com.itextpdf.text.pdf.hyphenation.Hyphenator;
 import java.util.ArrayList;
 
 /**
@@ -13,31 +15,73 @@ import java.util.ArrayList;
  */
 public class TextProcessor {
 
-	private String wrappedText = "";
-	private String tempLine = "";
-	private int maxLineWidth = 100;
+	private final int MAXLINEWIDTH = 100;
 
-	public String TextToLines(ArrayList<String> rawText) {
-		rawText.stream().forEach((word) -> {
-			if (tempLine.length() + word.trim().length() <= maxLineWidth) {
+	private final ArrayList<String> text = new ArrayList<>();
+	private int lastLine = 0;
+
+	public TextProcessor() {
+		text.add("");
+	}
+
+	public ArrayList<String> TextToLines(ArrayList<String> rawText) {
+		for (String word : rawText) {
+			if (text.get(text.size() - 1).length() + word.trim().length() <= MAXLINEWIDTH) {
 				AddToLine(word);
 			} else {
 				Hyphenate(word);
 			}
-		});
+		}
 
-		return null;
+		return text;
 	}
 
 	private void AddToLine(String word) {
-		if (tempLine.length() + word.trim().length() + 1 < maxLineWidth) {
-			tempLine += word + " ";
-		} else if (tempLine.length() + word.trim().length() +4 <= maxLineWidth) {
-			tempLine += word + "\n";
-		} 
+		if (text.get(lastLine).length() + word.trim().length() + 1 < MAXLINEWIDTH) {
+			text.set(lastLine, text.get(lastLine) + word + " ");
+		} else if (text.get(lastLine).length() + word.trim().length() == MAXLINEWIDTH) {
+			text.set(lastLine, text.get(lastLine) + word);
+			text.add("");
+			lastLine++;
+		} else if (text.get(lastLine).length() + word.trim().length() + 3 >= MAXLINEWIDTH) {
+			text.set(lastLine, text.get(lastLine) + word);
+			text.add("");
+			lastLine++;
+		}
 	}
 
 	private void Hyphenate(String word) {
+		Hyphenator h = new Hyphenator("de", "DR", 2, 2);
+		Hyphenation s = h.hyphenate(word);
 
+		int freeLineSpace = MAXLINEWIDTH - text.get(text.size() - 1).length();
+
+		if (s != null && freeLineSpace >= 3) {
+			String hyphText = "";
+			boolean addHyph = false;
+			String postHyphenAtNewLine = "";
+			int l = 0;
+			String hyphenedWord = "";
+			int hPos = 0;
+
+			for (int hPoints : s.getHyphenationPoints()) {
+				if (l + hPoints < freeLineSpace) {
+					l += hPoints;
+					hyphenedWord += s.getPreHyphenText(hPos++) + "-";
+				}
+			}
+
+			text.set(lastLine, text.get(lastLine) + hyphenedWord);
+			text.add(s.getPostHyphenText(s.getHyphenationPoints().length - 1) + " ");
+			lastLine++;
+		} else {
+			text.add("");
+			lastLine++;
+			text.set(lastLine, text.get(lastLine) + word);
+		}
+	}
+
+	public ArrayList<String> getText() {
+		return text;
 	}
 }
