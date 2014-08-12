@@ -75,9 +75,10 @@ public class TextProcessor {
 			text.add(s.getPostHyphenText(s.getHyphenationPoints().length - 1) + " ");
 			lastLine++;
 		} else {
+			text.set(lastLine, text.get(lastLine));
 			text.add("");
 			lastLine++;
-			text.set(lastLine, text.get(lastLine) + word);
+			text.set(lastLine, text.get(lastLine) + word + " ");
 		}
 	}
 

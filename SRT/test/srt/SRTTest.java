@@ -6,13 +6,10 @@
 
 package srt;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  *
@@ -41,14 +38,14 @@ public class SRTTest {
 	public void tearDown() {
 	}
 	
-	@Test
-	public void testHyphenation() {
-		ArrayList<String> wrappedText = new ArrayList<>(Arrays.asList(blindText.split(" ")));
-		SRT instance = new SRT();
-		String result = "";
-		result = instance.joinWordsToLine(wrappedText);
-		System.out.println(result);
-	}
+//	@Test
+//	public void testHyphenation() {
+//		ArrayList<String> wrappedText = new ArrayList<>(Arrays.asList(blindText.split(" ")));
+//		SRT instance = new SRT();
+//		String result = "";
+//		result = instance.joinWordsToLine(wrappedText);
+//		System.out.println(result);
+//	}
 
 	/**
 	 * Test of start method, of class SRT.

@@ -51,19 +51,4 @@ public class TextProcessorTest {
 		
 		fail("The test case is a prototype.");
 	}
-
-	/**
-	 * Test of getText method, of class TextProcessor.
-	 */
-//	@Test
-//	public void testGetText() {
-//		System.out.println("getText");
-//		TextProcessor instance = new TextProcessor();
-//		ArrayList<String> expResult = null;
-//		ArrayList<String> result = instance.getText();
-//		assertEquals(expResult, result);
-//		// TODO review the generated test code and remove the default call to fail.
-//		fail("The test case is a prototype.");
-//	}
-	
 }
