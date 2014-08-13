@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package srt;
 
 import com.google.common.base.Joiner;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import Courses.SlideBar;
 
 /**
  *
@@ -36,7 +37,8 @@ public class SceneBuilder {
 	private Button startSrt_btn;
 	private Label label1;
 	private Accordion accordion;
-	
+	private Label text;
+
 	public SceneBuilder(Stage primaryStage) {
 		prepareScene();
 
@@ -53,6 +55,7 @@ public class SceneBuilder {
 
 		primaryStage.setTitle("jSRT");
 		primaryStage.setScene(scene);
+
 		primaryStage.show();
 	}
 
@@ -85,7 +88,7 @@ public class SceneBuilder {
 		border.setCenter(vBoxCenter);
 		border.setLeft(vBoxLeft);
 
-		scene = new Scene(border, 300, 250);
+		scene = new Scene(border);
 	}
 
 	private void setupStart() {
@@ -105,26 +108,37 @@ public class SceneBuilder {
 //		label1 = new Label("Manual input:");
 		vBoxCenter.getChildren().setAll(inputText, startSrt_btn);
 	}
-	
-	private void StartSRT(String input) {
+
+	private Label StartSRT(String input) {
 		ArrayList<String> output = new ArrayList<>();
 		ArrayList<String> wrappedText = new ArrayList<>(Arrays.asList(input.split(" ")));
 //		wrappedText = Arrays.asList(input.split(" "));
 
 		TextProcessor tp = new TextProcessor();
 		output = tp.TextToLines(wrappedText);
-		
-		Label text = new Label(Joiner.on("\n").join(output));
+
+		text = new Label(Joiner.on("\n").join(output));
+//		text.applyCss();
 		text.setFont(Font.font(18));
 		text.setMinSize(300, 500);
 		text.setMaxSize(800, 800);
-		double height = text.getHeight();
-		double width = text.getWidth();
 
 		Button back = new Button("back");
 		back.setOnAction((ActionEvent event) -> {
 			setupStart();
 		});
 		vBoxCenter.getChildren().setAll(text, back);
+
+		if (text != null) {
+			Platform.runLater(() -> {
+//				System.out.println("text.getWidth() = " + text.getWidth());
+				double width = text.getWidth();
+				double height = text.getHeight();
+				text.getBoundsInParent();
+				SlideBar slideBar = new SlideBar(width, height);
+			});
+		}
+		
+		return text;
 	}
 }

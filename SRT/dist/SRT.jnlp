@@ -11,7 +11,7 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="SRT.jar" size="6280" download="eager" />
+    <jar href="SRT.jar" size="7525" download="eager" />
     <jar href="lib/guava-17.0.jar" size="2243036" download="eager" />
     <jar href="lib/itext-pdfa-5.5.2.jar" size="61018" download="eager" />
     <jar href="lib/itext-xtra-5.5.2.jar" size="76059" download="eager" />
