@@ -135,7 +135,7 @@ public class SceneBuilder {
 				double width = text.getWidth();
 				double height = text.getHeight();
 				text.getBoundsInParent();
-				SlideBar slideBar = new SlideBar(width, height);
+				SlideBar slideBar = new SlideBar(width, height, vBoxCenter);
 			});
 		}
 		

@@ -5,6 +5,8 @@
  */
 package Courses;
 
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import srt.SceneBuilder;
 
@@ -14,10 +16,13 @@ import srt.SceneBuilder;
  */
 public class SlideBar {
 
-	public SlideBar(double width, double height) {
+	public SlideBar(double width, double height, VBox vBox) {
 		System.out.println(width);
 		System.out.println(height);
 		Rectangle r = new Rectangle(0, 0, width, height);
+		r.setFill(Color.BLACK);
 		r.setOpacity(100);
+		
+		vBox.getChildren().add(r);
 	}
 }
