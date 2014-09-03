@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class TextProcessor {
 
-	private final int MAXLINEWIDTH = 100;
+	private final int MAXLINEWIDTH = 90;
 
 	private final ArrayList<String> text = new ArrayList<>();
 	private int lastLine = 0;

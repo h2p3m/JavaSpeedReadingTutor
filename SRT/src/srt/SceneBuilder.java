@@ -19,9 +19,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import Courses.SlideBar;
+import Courses.RowRunner;
 
 /**
  *
@@ -38,6 +37,7 @@ public class SceneBuilder {
 	private Label label1;
 	private Accordion accordion;
 	private Label text;
+	private String lineHeight = "1.8em";
 
 	public SceneBuilder(Stage primaryStage) {
 		prepareScene();
@@ -117,25 +117,29 @@ public class SceneBuilder {
 		TextProcessor tp = new TextProcessor();
 		output = tp.TextToLines(wrappedText);
 
+//		Text t = new Text();
+		
 		text = new Label(Joiner.on("\n").join(output));
 //		text.applyCss();
-		text.setFont(Font.font(18));
+//		text.setFont(Font.font(18));
 		text.setMinSize(300, 500);
 		text.setMaxSize(800, 800);
-
+		text.setStyle("-fx-font-size: " + lineHeight);
+		
 		Button back = new Button("back");
 		back.setOnAction((ActionEvent event) -> {
 			setupStart();
 		});
 		vBoxCenter.getChildren().setAll(text, back);
-
+		
 		if (text != null) {
 			Platform.runLater(() -> {
 //				System.out.println("text.getWidth() = " + text.getWidth());
 				double width = text.getWidth();
 				double height = text.getHeight();
 				text.getBoundsInParent();
-				SlideBar slideBar = new SlideBar(width, height, vBoxCenter);
+				RowRunner slideBar = new RowRunner(width, 23, vBoxCenter, lineHeight);
+				slideBar.run();
 			});
 		}
 		
